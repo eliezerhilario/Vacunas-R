@@ -1,0 +1,10 @@
+library(shiny)
+library(shinydashboard)
+# library(shinydashboardPlus)
+# library(shinyWidgets)
+library(tidyverse)
+library(lubridate)
+# library(reactlog)
+# reactlog_enable()
+library(readxl)
+require(scales) # Para que la función scale_y_continuous de los gráficos funcione
