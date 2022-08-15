@@ -1,7 +1,3 @@
-source('helpers.R')
-source('modules.R')
-
-# UI ================================================
 ui <- dashboardPage(
   title = 'Vacunas', skin = 'green',
 
@@ -12,11 +8,11 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(id='sidebarID',
       menuItem('General', tabName = 'general', icon = shiny::icon('home')),
-      menuItem('Tipo Cobertura', tabName = 'tipo_cobertura', icon = shiny::icon('home')),
+      menuItem('Tipo Cobertura', tabName = 'tipo_cob', icon = shiny::icon('home')),
       menuItem('Tipo PSS', tabName = 'tipo_pss', icon = shiny::icon('home')),
-      menuItem('Centros Especializados', tabName = 'centros_especializados', icon = shiny::icon('home')),
+      menuItem('Centros Especializados', tabName = 'centros_esp', icon = shiny::icon('home')),
       menuItem('Coberturas', tabName = 'coberturas', icon = shiny::icon('home')),
-      menuItem('PSS por Cobertura', tabName = 'pss_cobertura', icon = shiny::icon('home'))
+      menuItem('PSS por Cobertura', tabName = 'pss_cob', icon = shiny::icon('home'))
     )
   ),
   
@@ -27,49 +23,42 @@ ui <- dashboardPage(
     tabItems(
       ### Tab General ----------------------------------------
       tabItem(tabName = 'general',
-        modSelectIndicadoresUI('general'),
-        modGraficoUI('graficoGeneral')
+        box(title = NULL, status = 'success', solidHeader = T, #width = 12, 
+            medidaUI('general')),
+        tablaUI('general', 'DATOS GENERALES'),
+        graficoUI('general', 'DATOS GENERALES'),
       ),
       
       ### Tab Tipo Cobertura ----------------------------------------
-      tabItem(tabName = 'tipo_cobertura',
-        fluidRow(column(4, selectInput('tipo_cobertura', 'INDICADOR', choices = Indicadores))),
+      tabItem(tabName = 'tipo_cob',
         fluidRow(
-          box(title = 'Tipo Coberturas', 
-              plotOutput('tipo_cobertura'),
-              status = 'success',  
-              width = 12, 
-              solidHeader = T)
-        )
+          medidaUI('tipo_cob'),
+          filtroUI('tipo_cob', 'TIPO COBERTURA'),
+        ),
+        tablaUI('tipo_cob', 'TIPO COBERTURA'),
+        graficoUI('tipo_cob', 'TIPO COBERTURA')
       ),
       
       ### Tab Tipo PSS ----------------------------------------
       tabItem(tabName = 'tipo_pss',
-        fluidRow(column(4, selectInput('tipo_pss', 'INDICADOR', choices = Indicadores))),
-        fluidRow(
-          box(title = 'Tipo PSS', 
-              plotOutput('tipo_pss'),
-              status = 'success',  
-              width = 12, 
-              solidHeader = T)
-        )
+        medidaUI('tipo_pss'),
+        filtroUI('tipo_pss', 'TIPO RECLAMANTE'),
+        tablaUI('tipo_pss', 'TIPO RECLAMANTE'),
+        plotOutput('tipo_pss')
       ),
       
       ### Tab Centros Especializados ----------------------------------------
-      tabItem(tabName = 'centros_especializados',
-        fluidRow(column(4, selectInput('centros_espec', 'INDICADOR', choices = Indicadores))),
-        fluidRow(
-          box(title = 'Centros Especializados', 
-              plotOutput('centros_espec'),
-              status = 'success',  
-              width = 12, 
-              solidHeader = T)
-        )
+      tabItem(tabName = 'centros_esp',
+        medidaUI('centros_esp'),
+        filtroUI('pss', 'RECLAMANTE'),
+        tablaUI('centros_esp', 'CENTRO ESPECIALIZADO, RECLAMANTE'),
+        plotOutput('centros_espec')
       ),
       
       ### Tab Coberturas ----------------------------------------
       tabItem(tabName = 'coberturas',
-        fluidRow(column(4, selectInput('coberturas', 'INDICADOR', choices = Indicadores))),
+        medidaUI('coberturas'),
+        
         fluidRow(
           box(title = 'Coberturas', 
               plotOutput('coberturas'),
@@ -80,11 +69,12 @@ ui <- dashboardPage(
       ),
       
       ### Tab PSS por Cobertura ----------------------------------------
-      tabItem(tabName = 'pss_cobertura',  
-        fluidRow(column(4, selectInput('pss_cobertura', 'INDICADOR', choices = Indicadores))),
+      tabItem(tabName = 'pss_cob', 
+        medidaUI('pss_cob'),
+              
         fluidRow(
           box(title = 'PSS por Cobertura', 
-              plotOutput('pss_cobertura'),
+              plotOutput('pss_cob'),
               status = 'success',
               width = 12, 
               solidHeader = T)

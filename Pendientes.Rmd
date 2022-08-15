@@ -1,0 +1,14 @@
+---
+title: "Pendientes"
+author: "Eliezer"
+date: "2022-08-10"
+output: html_document
+---
+
+### Pendientes del proyecto:
+1. Actualizar los select de los filtros con la opción updateSelectInput en el servidor
+2. Hacer los filtros dependientes 1 de otros
+3. Poner las opciones en orden alfabético en los select
+4. Poner a funcionar los gráficos
+5. Poner sombras leves a los box
+6. Insertar el archivo de estilos al proyecto completo

@@ -1,26 +1,17 @@
-source('dependencies.R')
+# # Filtro datos
+# filtroDatos = function(datos, campo, filtro) {
+#   if ({{filtro}} == 'TODAS') {{datos}} else
+#   {{datos}} %>% filter({{datos}} == {{filtro}})
+# }
 
-# Importar datos ==========================================
-if (!exists('Datos')) {
-  # Datos <- vroom::vroom('Datos.zip', show_col_types = FALSE) Revisar como importar fechas con este método
-  Datos <- read_excel('data/Datos.xlsx', 
-                      col_types = c('numeric', 'text', 'date', 'text', 'text', 'text', 'text', 'text', 'numeric')) %>%  
-    mutate(AÑO = strftime(`FECHA APERTURA`,'%Y'), MES = strftime(`FECHA APERTURA`,'%m'),
-           PERIODO1 = paste0(AÑO, '-', MES),
-           PERIODO = floor_date(`FECHA APERTURA`, 'month')
+# Preparar los datos
+data = function(.datos, ...) {
+  .datos %>% group_by(...) %>%
+    summarise(MONTO = sum(`MONTO AUTORIZADO`),
+              AUTORIZACIONES = n_distinct(INTEGRALIDAD),
+              `MM AUTORIZACION` = MONTO / AUTORIZACIONES,
+              USUARIOS = n_distinct(CDPERSON),
+              `MM USUARIO` = MONTO / USUARIOS,
+              .groups = "drop"
     )
 }
-
-Indicadores = choices = c('MONTO', 'AUTORIZACIONES', 'MM AUTORIZACION', 'USUARIOS', 'MM USUARIO')
-
-# Datos Inputs ==========================================
-# Coberturas = Datos %>% distinct(`COD COBERTURA`, COBERTURA)
-
-# Indicadores = c('MONTO', 'AUTORIZACIONES', 'MM AUTORIZACION', 'USUARIOS', 'MM USUARIO')
-
-
-# Funciones ==========================================
-
-
-
-

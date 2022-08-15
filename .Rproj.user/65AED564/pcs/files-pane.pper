@@ -2,12 +2,12 @@
     "sortOrder": [
         {
             "columnIndex": 2,
-            "ascending": true
+            "ascending": false
         },
         {
             "columnIndex": 3,
             "ascending": false
         }
     ],
-    "path": "C:/Users/DH311885/ADMINISTRADORA DE RIESGOS DE SALUD PALIC/Departamento De Actuaria - Documentos/Analisis RStudio/Shiny/Vacunas"
+    "path": "C:/Users/DH311885/ADMINISTRADORA DE RIESGOS DE SALUD PALIC/Departamento De Actuaria - Documentos/Analisis RStudio/Shiny/Vacunas-R"
 }
