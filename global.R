@@ -1,7 +1,7 @@
 # LIBRERÍAS ==========================================
 library(shiny)
 library(shinydashboard)
-# library(echarts4r)
+library(echarts4r)
 # library(shinydashboardPlus)
 # library(shinyWidgets)
 library(tidyverse)
@@ -27,6 +27,8 @@ if (!exists('Datos')) {
   # )#Revisar como importar fechas con este método
 }
 
+
+# Coberturas = setNames(Datos$`COD COBERTURA`, Datos$COBERTURA)
 
 # CARGAR MÓDULOS ==========================================
 source('helpers.R')

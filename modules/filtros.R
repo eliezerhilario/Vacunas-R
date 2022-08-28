@@ -1,11 +1,8 @@
-# Medidas  ----------------------------------------
-Hola = setNames(Datos$`COD COBERTURA`, Datos$COBERTURA)
-medidas = c('MONTO', 'AUTORIZACIONES', 'MM AUTORIZACION', 'USUARIOS', 'MM USUARIO')
-
+# Medidas ========================================
 medidaUI <- function(id, label = 'MEDIDA') {
   ns <- NS(id)
   # tagList(
-    column(6,
+    column(4,
       selectizeInput(ns('medida'), label = label,
         choices = c('MONTO', 'AUTORIZACIONES', 'MM AUTORIZACION', 'USUARIOS', 'MM USUARIO')) 
     )
@@ -14,28 +11,25 @@ medidaUI <- function(id, label = 'MEDIDA') {
 
 medidaServer <- function(id) {
   moduleServer(id, function(input, output, session) {
-    list(medida = reactive({input$medida}))
+    reactive({input$medida})
+    # list(medida = reactive({input$medida}))
   })
 }
 
 
-# Filtros ----------------------------------------
+# Filtros ========================================
 filtroUI <- function(id, campo) {
   ns <- NS(id)
-  tagList(
-    column(6,
-      selectizeInput(ns('filtro'), label = campo,
-        choice = c('TODAS', Datos %>% distinct(.data[[campo]]))
-      )
+    column(4,
+      selectizeInput(ns('filtro'), label = campo, choice = NULL)
     )
-  )
 }
 
-filtroServer <- function(id) {
+filtroServer <- function(id, datos, campo) {
   moduleServer(id, function(input, output, session) {
-    
-    # updateSelectInput(session, 'filtro', choices = data, server = T)
-    
-    list(filtro = reactive(input$filtro))
+    updateSelectizeInput(session, 'filtro', server = T, 
+                         choices = c('TODAS', sort(unique(datos[[campo]]))))
+    reactive(input$filtro)
+    # list(filtro = reactive(input$filtro))
   })
 }

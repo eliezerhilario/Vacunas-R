@@ -1,79 +1,84 @@
 server <- function(input, output, session) {
   # Tab General ==========================================
-
   medidaGeneral = medidaServer('general')
+  datosGenerales = reactive(consolidado(Datos, MES, AÑO))
   
-  datosGenerales = reactive(data(Datos, AÑO, PERIODO))
-  
-  observeEvent(medidaGeneral$medida(), {
-    tablaServer('general', datosGenerales() %>% 
-                  select(PERIODO, AÑO, medidaGeneral$medida()))
-
-    # graficoServer('general',
-    #               datos = datosGenerales(),
-    #               x = factor('PERIODO'),
-    #               y = medidaGeneral$medida(),
-    #               group = 'AÑO')
+  observeEvent(medidaGeneral(), {
+    tablaServer('general', datosGenerales() %>% select(MES, AÑO, medidaGeneral()))
+    graficoServer('general', datosGenerales(), MES, medidaGeneral(), AÑO)
   })
 
+  
   # Tab Tipo Coberturas ==========================================
-    
   medidaTipoCob = medidaServer('tipo_cob')
-  filtroTipoCob = filtroServer('tipo_cob')
-
-  filtroDatosTipoCob = reactive(
-    if (filtroTipoCob$filtro() == 'TODAS') Datos else
-      Datos %>% filter(`TIPO COBERTURA` == filtroTipoCob$filtro())
-  )
+  filtroTipoCob = filtroServer('tipo_cob', Datos, 'TIPO COBERTURA')
   
   datosTipoCob = reactive(
-    data(filtroDatosTipoCob(), `TIPO COBERTURA`, PERIODO)
+    consolidado(filtroDatos(Datos, filtroTipoCob(), 'TIPO COBERTURA'), PERIODO, `TIPO COBERTURA`)
   )
   
-  observeEvent(c(medidaTipoCob$medida(), filtroTipoCob$filtro()), {
-    tablaServer('tipo_cob', datosTipoCob() %>% 
-                  select(PERIODO, `TIPO COBERTURA`, medidaTipoCob$medida()))
+  observeEvent(c(medidaTipoCob(), filtroTipoCob()), {
+    tablaServer('tipo_cob', datosTipoCob() %>% select(PERIODO, `TIPO COBERTURA`, medidaTipoCob()))
+    graficoServer('tipo_cob', datosTipoCob(), PERIODO, medidaTipoCob(), `TIPO COBERTURA`)
   })
   
   
   # Tab Tipo PSS ==========================================
-  medidaTipoPSS = medidaServer('tipo_pss')
-  filtroTipoPSS = filtroServer('tipo_pss')
+  medidaTipoPss = medidaServer('tipo_pss')
+  filtroTipoPss = filtroServer('tipo_pss', Datos, 'TIPO RECLAMANTE')
   
-  filtroDatosTipoPSS = reactive(
-    if (filtroTipoPSS$filtro() == 'TODAS') Datos else
-      Datos %>% filter(`TIPO RECLAMANTE` == filtroTipoPSS$filtro())
+  datosTipoPss = reactive(
+    consolidado(filtroDatos(Datos, filtroTipoPss(), 'TIPO RECLAMANTE'), PERIODO, `TIPO RECLAMANTE`)
   )
   
-  datosTipoPSS = reactive(
-    data(filtroDatosTipoPSS(), `TIPO RECLAMANTE`, PERIODO)
-  )
-  
-  observeEvent(c(medidaTipoPSS$medida(), filtroTipoPSS$filtro()), {
-    tablaServer('tipo_pss', datosTipoPSS() %>% 
-                  select(PERIODO, `TIPO RECLAMANTE`, medidaTipoPSS$medida()))
+  observeEvent(c(medidaTipoPss(), filtroTipoPss()), {
+    tablaServer('tipo_pss', datosTipoPss() %>% select(PERIODO, `TIPO RECLAMANTE`, medidaTipoPss()))
   })
   
   
-  # Tab Centros Especializados ==========================================
+  # Tab Reclamantes ==========================================
+  medidaPss = medidaServer('reclamante')
+  tipoPssPss = filtroServer('tipo_pss_pss', Datos, 'TIPO RECLAMANTE')
+  filtroPss = filtroServer('pss', Datos %>% filter(`TIPO RECLAMANTE` == 'CLINICA'), 'RECLAMANTE')
+  # filtroPss = filtroServer('pss', filtro(), 'RECLAMANTE')
   
-  medidaCentroEsp = medidaServer('centros_esp')
-  filtroPSS = filtroServer('pss')
+  filtro = reactive(filtroDatos(datos_TipoPss(), tipoPssPss(), 'TIPO RECLAMANTE'))
   
-  filtroDatosCentroEsp = reactive(
-    if (filtroPSS$filtro() == 'TODAS') {
-      Datos %>% filter(`TIPO RECLAMANTE` == 'CENTRO ESPECIALIZADO') 
-    } else {
-      Datos %>% filter(`TIPO RECLAMANTE` == 'CENTRO ESPECIALIZADO', `RECLAMANTE` == filtroPSS$filtro())
-    }
+  datos_TipoPss = reactive(
+    filtroDatos(Datos, tipoPssPss(), 'TIPO RECLAMANTE')
   )
   
-  datosCentroEsp = reactive(
-    data(filtroDatosCentroEsp(), `RECLAMANTE`, PERIODO)
+  datosPss = reactive(
+    consolidado(filtroDatos(datos_TipoPss(), filtroPss(), 'RECLAMANTE'), `RECLAMANTE`, PERIODO)
   )
 
-  observeEvent(c(medidaCentroEsp$medida(),datosCentroEsp()), {
-    tablaServer('centros_esp', datosCentroEsp() %>%
-                  select(PERIODO, `RECLAMANTE`, medidaCentroEsp$medida()))
+  observeEvent(c(medidaPss(), tipoPssPss(), filtroPss()), {
+    tablaServer('reclamante', datosPss() %>% select(PERIODO, `RECLAMANTE`, medidaPss()))
+  })
+  
+  
+  # Tab Tipo PSS ==========================================
+  medidaTipoPss = medidaServer('tipo_pss')
+  filtroTipoPss = filtroServer('tipo_pss', Datos, 'TIPO RECLAMANTE')
+  
+  datosTipoPss = reactive(
+    consolidado(filtroDatos(Datos, filtroTipoPss(), 'TIPO RECLAMANTE'), `TIPO RECLAMANTE`, PERIODO)
+  )
+  
+  observeEvent(c(medidaTipoPss(), filtroTipoPss()), {
+    tablaServer('tipo_pss', datosTipoPss() %>% select(PERIODO, `TIPO RECLAMANTE`, medidaTipoPss()))
+  })
+  
+  
+  # Tab PSS por Cobertura ==========================================
+  medidaPssCob = medidaServer('pss_cob')
+  filtroPssCob = filtroServer('pss_cob', Datos, 'COBERTURA')
+  
+  datosPssCob = reactive(
+    consolidado(filtroDatos(Datos, filtroPssCob(), 'COBERTURA'), RECLAMANTE, PERIODO)
+  )
+  
+  observeEvent(c(medidaPssCob(), filtroPssCob()), {
+    tablaServer('pss_cob', datosPssCob() %>% select(PERIODO, RECLAMANTE, medidaPssCob()))
   })
 }
