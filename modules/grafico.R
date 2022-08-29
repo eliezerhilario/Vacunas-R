@@ -13,9 +13,10 @@ graficoUI <- function(id, titulo = '') {
 graficoServer <- function(id, datos, x, y, group) {
   moduleServer(id, function(input, output, session) {
     output$grafico <- renderEcharts4r({
-      datos %>% group_by({{group}}) %>%
-        e_charts(x = {{x}}) %>%
-        e_line(serie = {{y}}, symbol = 'circle', symbolSize = 10) %>%
+      datos %>%
+        dplyr::group_by(.data[[group]]) %>%
+        e_charts_(x = x) %>%
+        e_line_(serie = y, symbol = 'circle', symbolSize = 10) %>%
         e_tooltip()
     })
   })
