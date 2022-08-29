@@ -5,7 +5,7 @@ server <- function(input, output, session) {
   
   observeEvent(medidaGeneral(), {
     tablaServer('general', datosGenerales() %>% select(MES, AÑO, medidaGeneral()))
-    graficoServer('general', datosGenerales(), MES, medidaGeneral(), AÑO)
+    graficoServer('general', datosGenerales(), "MES", medidaGeneral(), "AÑO")
   })
 
   
@@ -19,7 +19,7 @@ server <- function(input, output, session) {
   
   observeEvent(c(medidaTipoCob(), filtroTipoCob()), {
     tablaServer('tipo_cob', datosTipoCob() %>% select(PERIODO, `TIPO COBERTURA`, medidaTipoCob()))
-    graficoServer('tipo_cob', datosTipoCob(), PERIODO, medidaTipoCob(), `TIPO COBERTURA`)
+    graficoServer('tipo_cob', datosTipoCob(), "PERIODO", medidaTipoCob(), "TIPO COBERTURA")
   })
   
   
