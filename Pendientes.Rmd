@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ### Pendientes del proyecto:
-* Poner a funcionar los gráficos
+* Insertar mas de una variables a la vez en los gráficos desde el filtro
 * Hacer los filtros dependientes 1 de otros
 * Poner sombras leves a los box
 * Insertar el archivo de estilos al proyecto completo

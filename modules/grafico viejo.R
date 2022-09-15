@@ -36,5 +36,27 @@ graficoServer <- function(id, x, y, group) {
         geom_line(size = 0.9) + geom_point(size = 3.5) + labs(title = y) +
         scale_y_continuous(labels = comma) + theme_minimal()
     }
+    
+    
+    
+    # GRAFICO DE PRUEBA
+    # Prueba %>% group_by(`TIPO RECLAMANTE`) %>%
+    #   e_charts(PERIODO) %>%
+    #   e_line(serie = MONTO, symbol = 'circle', symbolSize = 10) %>%
+    #   e_axis_labels(x = x, y = y) %>% 
+    #   e_tooltip() %>% #e_tooltip(trigger = 'axis') %>%
+    #   e_grid(right = '30%', left = '80') %>%
+    #   e_legend(orient = 'vertical', right = '15', top = '15%',
+    #            selector = list(
+    #              list(type = 'inverse', title = 'Invertir'),
+    #              list(type = 'all', title = 'Todos')
+    #            )) 
+      # e_legend(right = 0) %>% 
+      # e_show_loading(text = "Procesando", color = "green")
+      # e_theme("infographic")
+      # e_theme("dark")%>%
+    #   e_title(text = "Monthly Median Single-Family Home Prices", subtext = "Source: Zillow.com",
+    #           sublink = "https://www.zillow.com/research/data/", left = "center"),
+    
   })
 }

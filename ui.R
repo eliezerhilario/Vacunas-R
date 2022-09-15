@@ -24,21 +24,6 @@ ui <- dashboardPage(
       ### Tab General ----------------------------------------
       tabItem(tabName = 'general',
         fluidRow(medidaUI('general')),
-        
-        # GRAFICO DE PRUEBA
-        # Prueba %>% group_by(`TIPO RECLAMANTE`) %>%
-        #   e_charts(PERIODO) %>%
-        #   e_line(serie = MONTO, symbol = 'circle', symbolSize = 10) %>%
-        #   e_tooltip() %>% #e_tooltip(trigger = 'axis') %>%
-        #   e_grid(right = '30%', left = '80') %>%
-        #   e_legend(orient = 'vertical', right = '15', top = '15%',
-        #            selector = list(
-        #              list(type = 'inverse', title = 'Invertir'),
-        #              list(type = 'all', title = 'Todos')
-        #            )) %>%
-        #   e_title(text = "Monthly Median Single-Family Home Prices", subtext = "Source: Zillow.com",
-        #           sublink = "https://www.zillow.com/research/data/", left = "center"),
-
         graficoUI('general', 'DATOS GENERALES'),
         tablaUI('general', 'DATOS GENERALES')
       ),
@@ -53,8 +38,8 @@ ui <- dashboardPage(
       ### Tab Tipo Reclamante ----------------------------------------
       tabItem(tabName = 'tipo_pss',
         fluidRow(medidaUI('tipo_pss'), filtroUI('tipo_pss', 'TIPO RECLAMANTE')),
-        plotOutput('tipo_pss'),
-        tablaUI('tipo_pss', 'TIPO RECLAMANTE')
+        graficoUI('tipo_pss', 'TIPO RECLAMANTE'),
+        # tablaUI('tipo_pss', 'TIPO RECLAMANTE')
       ),
       
       ### Tab Reclamante ----------------------------------------
@@ -64,28 +49,21 @@ ui <- dashboardPage(
           filtroUI('tipo_pss_pss', 'TIPO RECLAMANTE'),
           filtroUI('pss', 'RECLAMANTE')
         ),
-        plotOutput('reclamante'),
+        graficoUI('reclamante', 'RECLAMANTE'),
         tablaUI('reclamante', 'RECLAMANTE')
       ),
       
       ### Tab Coberturas ----------------------------------------
       tabItem(tabName = 'coberturas',
-        medidaUI('coberturas'),
-        
-        fluidRow(
-          box(title = 'Coberturas', 
-              plotOutput('coberturas'),
-              status = 'success',
-              width = 12, 
-              solidHeader = T)
-        )
+        fluidRow(medidaUI('coberturas')),
+        graficoUI('coberturas', 'COBERTURAS')
       ),
       
       ### Tab PSS por Cobertura ----------------------------------------
       tabItem(tabName = 'pss_cob', 
         fluidRow(medidaUI('pss_cob'), filtroUI('pss_cob', 'COBERTURA')),
-        plotOutput('pss_cob'),
-        tablaUI('pss_cob', 'COBERTURA')
+        graficoUI('pss_cob', 'COBERTURAS POR PSS'),
+        # tablaUI('pss_cob', 'COBERTURA')
       )
     )
   )

@@ -21,7 +21,7 @@ medidaServer <- function(id) {
 filtroUI <- function(id, campo) {
   ns <- NS(id)
     column(4,
-      selectizeInput(ns('filtro'), label = campo, choice = NULL)
+      selectizeInput(ns('filtro'), label = campo, choice = NULL)#, selected = 'TODAS', multiple = T)
     )
 }
 

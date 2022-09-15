@@ -10,14 +10,20 @@ graficoUI <- function(id, titulo = '') {
   )
 }
 
-graficoServer <- function(id, datos, x, y, group) {
+graficoServer <- function(id, datos, x, y, group = NULL) {
   moduleServer(id, function(input, output, session) {
     output$grafico <- renderEcharts4r({
-      datos %>%
-        dplyr::group_by(.data[[group]]) %>%
-        e_charts_(x = x) %>%
-        e_line_(serie = y, symbol = 'circle', symbolSize = 10) %>%
-        e_tooltip()
+      if(!is.null(group)) datos = datos %>% group_by(.data[[group]])
+        datos %>% 
+          e_charts_(x) %>%
+          e_line_(serie = y, smooth = T, symbol = 'circle', symbolSize = 8) %>%
+          e_tooltip() %>%
+          e_grid(left = '80', right = '30') %>%
+          e_legend(type = c("scroll"), selector = list(
+                     list(type = 'inverse', title = 'Invertir'),
+                     list(type = 'all', title = 'Todos')
+                   )) %>%
+          e_show_loading(text = "Procesando", color = "green")
     })
   })
 }
